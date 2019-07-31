@@ -1,0 +1,17 @@
+url:
+    # 上海股票列表
+    SHStockList: "http://guba.eastmoney.com/remenba.aspx?type=1&tab=1"
+    # 深圳股票列表
+    SZStockList: "http://guba.eastmoney.com/remenba.aspx?type=1&tab=2"
+model:
+    # 个股主页的URL模型
+    StockHome: "http://quote.eastmoney.com/[stockExchange][stockCode].html"
+    # 个股每日交易价格详情列表的URL模型
+    DealPriceList: "http://quote.eastmoney.com/[stockExchange][stockCode].html"   
+    # 个股每日交易的K线图片的URL模型
+    KLineImg: "http://webquotepic.eastmoney.com/GetPic.aspx?id=[stockCode]&imageType=rf&token=[userToken]"
+api: # API类型的URL，参数太多，不适合动态拼，所以从主页URL中过滤出来比较合适
+    # 个股近几年的交易详情API
+    DealDetailFromThousandDays: "http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&token=4f1862fc3b5e77c150a2b985b12db0fd&cb=jQuery1830002129284713296764_1563980518382&id=[stockCode]&type=k&authorityType=&_=1563980522045"
+    # 市净率和市盈率
+    TTM: "http://24.push2.eastmoney.com/api/qt/stock/get?fields=f162,f167&invt=2&fltt=2&ut=bd1d9ddb04089700cf9c27f6f7426281&cb=jQuery172028304362463696187_1564505076485&secid=1.900957&_=1564505077039"

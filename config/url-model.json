@@ -1,0 +1,15 @@
+{
+    "url": {
+        "SHStockList": "http://guba.eastmoney.com/remenba.aspx?type=1&tab=1",
+        "SZStockList": "http://guba.eastmoney.com/remenba.aspx?type=1&tab=2"
+    },
+    "model": {
+        "StockHome": "http://quote.eastmoney.com/[stockExchange][stockCode].html",
+        "DealPriceList": "http://quote.eastmoney.com/[stockExchange][stockCode].html",
+        "KLineImg": "http://webquotepic.eastmoney.com/GetPic.aspx?id=[stockCode]&imageType=rf&token=[userToken]"
+    },
+    "api": {
+        "DealDetailFromThousandDays": "http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&token=4f1862fc3b5e77c150a2b985b12db0fd&cb=jQuery1830002129284713296764_1563980518382&id=[stockCode]&type=k&authorityType=&_=1563980522045",
+        "TTM": "http://24.push2.eastmoney.com/api/qt/stock/get?fields=f162,f167&invt=2&fltt=2&ut=bd1d9ddb04089700cf9c27f6f7426281&cb=jQuery172028304362463696187_1564505076485&secid=1.900957&_=1564505077039"
+    }
+}
