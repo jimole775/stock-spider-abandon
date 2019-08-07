@@ -2,6 +2,7 @@ import '@babel/polyfill'
 
 import spillStockModel from './process/phantomjs/spill-stock-model'
 import sniffHomePage from './process/phantomjs/sniff-home-page'
+import sniffGemStocks from './process/phantomjs/sniff_gem_stocks'
 // global.external = {
 //     token: '',
 //     allStocks: []
@@ -9,7 +10,10 @@ import sniffHomePage from './process/phantomjs/sniff-home-page'
 
 ;(async () => {
     await spillStockModel.init()
-    const allStocks = await spillStockModel.getStocks()
+    await sniffGemStocks.init()
     await sniffHomePage.init()
-    sniffHomePage.openPage(allStocks)
+    const allStocks = await spillStockModel.getAllStocks()
+    const stocksWithoutGems = await sniffGemStocks.queryGemStocks(allStocks)
+    console.log(stocksWithoutGems)
+    sniffHomePage.openPage(stocksWithoutGems)
 })()

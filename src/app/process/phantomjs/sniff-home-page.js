@@ -2,7 +2,7 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:25 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-08-06 23:17:12
+ * @Last Modified time: 2019-08-08 00:58:30
  */
 import phantom from 'phantom'
 import util from '../../../public/util'
@@ -59,14 +59,12 @@ class SniffHomePage {
 
                 const stock = allStocks[i]
                 // 名字不带 "ST" "退市" "银行" "钢"        
-                console.log('加载中...', stock.stockCode, stock.stockName)
-                if (!/([A-Z]|退市|银行|钢)/.test(stock.stockName) && !hqList[stock.stockCode] && !dishqList[stock.stockCode]) {
-                    const status = await this.page.open(stock.stockHome)
-                    
+                console.log('加载中...', stock.code, stock.name, stock.home)
+                if (!/([A-Z]|退市|银行|钢)/.test(stock.name) && !hqList[stock.code] && !dishqList[stock.code]) {
+                    const status = await this.page.open(stock.home)
                     if (status === 'success') {
                     } else {
-                        // j('加载失败:', stock.stockHome)
-                        console.log('加载失败:', stock.stockName)
+                        console.log('加载失败:', stock.name)
                     }
                     
                     // 增加一个随机的延迟，防止被请求被屏蔽
@@ -77,16 +75,16 @@ class SniffHomePage {
                             return phantom.exit()                            
                         }
                         return loopLoadPage(++ i)
-                    }, Math.random() * 500 + Math.random() * 200 + Math.random() * 100 + 1000)
+                    }, Math.random() * 500 + Math.random() * 200 + Math.random() * 100 + 2000)
                 } else {
-                    // setTimeout(() => {
+                    setTimeout(() => {
                     if (i === allStocks.length - 1) {
                         s('SniffHomePage loopLoadPage end')
                         this.page.close()
                         return phantom.exit()                            
                     }
                     return loopLoadPage(++ i)
-                    // }, 100)
+                    }, 15)
                 } 
         
             }

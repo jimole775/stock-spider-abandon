@@ -2,7 +2,7 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:25 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-08-06 22:27:08
+ * @Last Modified time: 2019-08-08 00:56:54
  */
 import phantom from 'phantom'
 import util from '../../../public/util'
@@ -35,9 +35,19 @@ class SpillStockModel {
         })
     }
 
-    getStocks() {
+    /**
+     * 
+     * @return [{ code:'', name:'', home:'' }]  
+     */
+    getAllStocks() {
         return new Promise((s, j) => {  
-            let allStocks = []         
+            let allStocks = [
+                // {
+                //     code:'',
+                //     name:'',
+                //     home:''
+                // }
+            ]         
             const loopLoadPage = async (i, s, j) => {  
                 const url = this.urls[i]
                 const status = await this.page.open(url)
@@ -53,18 +63,17 @@ class SpillStockModel {
                     allStocks = allStocks.concat(stockList)
                 } else {
                     console.log('加载失败:', url)
-                    j('加载失败:', url)
+                    // j('加载失败:', url)
                 }
                 
                 // 增加一个随机的延迟，防止被请求被屏蔽
                 setTimeout(() => {
                     if (i === this.urls.length - 1) {
-                        // global.external.allStocks = allStocks
                         this.page.close()
                         return s(allStocks)                        
                     }
                     return loopLoadPage(++ i, s, j)
-                }, Math.random() * 300 + Math.random() * 200 + Math.random() * 100)  
+                }, Math.random() * 300 + Math.random() * 200 + Math.random() * 100 + 1000)  
             }
 
             loopLoadPage(0, s, j)
@@ -110,9 +119,9 @@ class SpillStockModel {
                 let stockName = item.split(',')[1]            
                 if (stockCode && stockName) {
                     let model = {
-                        stockCode: stockCode,
-                        stockName: stockName,
-                        stockHome: urlModel.model.StockHome.replace('[stockExchange]', tabType).replace('[stockCode]', stockCode),
+                        code: stockCode,
+                        name: stockName,
+                        home: urlModel.model.StockHome.replace('[stockExchange]', tabType).replace('[stockCode]', stockCode),
                     }
                     stockModel.push(model)
                 }

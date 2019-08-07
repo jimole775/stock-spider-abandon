@@ -14,6 +14,8 @@
         "KLineImg": "http://webquotepic.eastmoney.com/GetPic.aspx?id=[stockCode]&imageType=rf&token=[userToken]"
     },
     "api": {       
+        "GemBoardList_desc": "# 创业板列表",
+        "GemBoardList": "http://50.push2.eastmoney.com/api/qt/clist/get?cb=jQuery1124033573549430679495_1565189323567&pn=1&pz=9999&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:80&fields=f12,f14&_=1565189323650",
         "dealPriceDetail_desc": "# 每笔交易细节",
         "dealPriceDetail": "http://mdfm.eastmoney.com/EM_UBG_MinuteApi/Js/Get?dtype=all&token=44c9d251add88e27b65ed86506f6e5da&rows=144&cb=jQuery17209422426056116819_1563976899831&page=1&id=6016981&gtvolume=&sort=&_=1563977140110",
         "allDealDetail_desc": "# 个股近几年的交易详情API",
