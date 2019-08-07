@@ -14,10 +14,10 @@ var aliasCombo = require('gulp-alias-combo');
 
 gulp.task('dev', function() {
   return browserify({
-        entries: './app/index.js',
+        entries: './src/app/index.js',
         debug: true
     })
-    // phantomjs的模块不要打包，因为默认这些包都只打给nodejs用的
+    // phantomjs的模块不要打包，否则无法运行
     .external(['phantom'])
     .transform(babelify, {})
     .bundle()
@@ -28,10 +28,10 @@ gulp.task('dev', function() {
 
 gulp.task('build', function() {
   return browserify({
-        entries: './app/index.js',
+        entries: './src/app/index.js',
         debug: false
     })
-    // phantomjs的模块不要打包，因为默认这些包都只打给nodejs用的
+    // phantomjs的模块不要打包，否则无法运行
     .external(['phantom'])
     .transform(babelify, {})
     .bundle()
@@ -46,7 +46,7 @@ gulp.task('build', function() {
 })
 
 gulp.task('watching', gulp.series('dev',function() {
-    return watch('./app/**/*.js', gulp.series('dev'))
+    return watch('./src/app/**/*.js', gulp.series('dev'))
 }))
 
 gulp.task('shell:open', shell.task('npm run dev:multi'))

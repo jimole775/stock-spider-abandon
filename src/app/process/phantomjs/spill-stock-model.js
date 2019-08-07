@@ -2,23 +2,26 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:25 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-07-30 21:41:50
+ * @Last Modified time: 2019-08-06 22:27:08
  */
 import phantom from 'phantom'
 import util from '../../../public/util'
 import urlModel from '../../../../config/url-model.json'
 class SpillStockModel {
-    constructor(){  
+    constructor() {  
+        // this.urlModel = util.loadYaml('../../../../config/url-model.yml')
     }
-
-    init(){
+    init() {
         return new Promise(async (s, j)=>{
             this.instance = await phantom.create()
-            this.page = await this.instance.createPage()   
+            this.page = await this.instance.createPage()  
             this.urls = [
                 urlModel.url.SHStockList,
                 urlModel.url.SZStockList
             ]
+            this.page.on('error', function(e){
+                console.log(e)
+            })
             this.page.on('onResourceRequested', true, function (requestData, networkRequest) {
                 if (util.isImgUrl(requestData.url)  || util.isCSSUrl(requestData.url)) {
                     networkRequest.abort()
@@ -28,11 +31,11 @@ class SpillStockModel {
                 // that.goToken(response.url)
                 // console.log('token', global.external.token)
             })
-            s()
+            s('SpillStockModel init success')
         })
     }
 
-    openPage() {
+    getStocks() {
         return new Promise((s, j) => {  
             let allStocks = []         
             const loopLoadPage = async (i, s, j) => {  
@@ -56,20 +59,18 @@ class SpillStockModel {
                 // 增加一个随机的延迟，防止被请求被屏蔽
                 setTimeout(() => {
                     if (i === this.urls.length - 1) {
-                        global.external.allStocks = allStocks
+                        // global.external.allStocks = allStocks
                         this.page.close()
-                        s()
-                        return
+                        return s(allStocks)                        
                     }
-                    loopLoadPage(++ i, s, j)
-                }, Math.random() * 300 + Math.random() * 200)  
+                    return loopLoadPage(++ i, s, j)
+                }, Math.random() * 300 + Math.random() * 200 + Math.random() * 100)  
             }
 
             loopLoadPage(0, s, j)
         })
     }
-    
-    
+        
     queryContent(htmlStr) {
         try {
             // 样例
@@ -89,17 +90,17 @@ class SpillStockModel {
                 ulContent = ulContent.replace(/\)/g, ',')
 
                 ulContentSpill += ulContent
-            });
+            })
            
             // 裁剪掉 "非数据" 的后半部    
             return ulContentSpill.split('</a></li>')
         } catch(e) {
-            console.log('./app/src/spill-stock-model.js: ', e)
-            phantom.exit()
+            console.log('./src/app/process/phantomjs/spill-stock-model.js: ', e)
+            // phantom.exit()
         }
     }
     
-    spillStockList(stocksTxt, tabType) {  
+    spillStockList(stocksTxt, tabType) {
         try {
             let loop = stocksTxt.length
             let stockModel = []
@@ -119,24 +120,35 @@ class SpillStockModel {
 
             return stockModel
         } catch(e) {
-            console.log('./app/src/spill-stock-model.js: ', e)
-            phantom.exit()
+            console.log('./src/app/process/phantomjs/spill-stock-model.js: ', e)
+            // phantom.exit()
         }
     }
+
     goToken(url) {
         try {
-            if(!global.external.token){
+            if (!global.external.token) {
                 var matchs = url.match(/[\?|\&]token\=[\d\w]+/ig)
                 if (matchs.length) {
                     global.external.token = matchs[0].split('=')[1]
                 }
             }
         } catch (error) {
-            console.log('.\app\src\phantom-process\sniff-home-page.js:87 ', error)
-            phantom.exit()
+            console.log('./src/app/process/phantomjs/sniff-home-page.js:87 ', error)
+            // phantom.exit()
         }     
     }    
     
+    // loadYaml(url) {
+    //     require('fs', function(){console.log('arv', arguments)})
+        // return yaml.load(fs.readFileSync(url, 'utf8'))
+        // return new Promise((s, j) => {
+        //     fs.readFile(url, 'utf8', (err, content) => {
+        //         err && j(err)
+        //         !err && s(yaml.load(content))
+        //     })
+        // })        
+    // }
 }
 
 export default new SpillStockModel()

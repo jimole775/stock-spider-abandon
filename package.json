@@ -44,6 +44,8 @@
     "js-yaml": "^3.13.1",
     "phantom": "^6.2.0",
     "reactify": "^1.1.1",
+    "superagent": "^5.1.0",
+    "telnet-client": "^1.0.4",
     "through2": "^3.0.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"

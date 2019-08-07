@@ -1,9 +1,7 @@
 
-<h1 id="stockList">全股票列表</h1>
-http://guba.eastmoney.com/remenba.aspx?type=1
-
 <h1 id="stockhome">个股主页</h1>
 http://quote.eastmoney.com/sh[stockCode].html
+
 
 # 个股每分钟的交易详情
 ## 接口模型
@@ -47,13 +45,14 @@ http://gbapi.eastmoney.com/webarticlelist/api/Article/Articlelist?callback=jQuer
 - {re:[{...,post_title:""}]}
 
 
-# 市净率和市盈率接口
-http://24.push2.eastmoney.com/api/qt/stock/get?fields=f162,f167&invt=2&fltt=2&ut=bd1d9ddb04089700cf9c27f6f7426281&cb=jQuery172028304362463696187_1564505076485&secid=1.900957&_=1564505077039
+# 基本面所有字段的接口
+http://push2.eastmoney.com/api/qt/stock/get?ut=fa5fd1943c7b386f172d6893dbfba10b&invt=2&fltt=2&fields=f43,f57,f58,f169,f170,f46,f44,f51,f168,f47,f164,f116,f60,f45,f52,f50,f48,f167,f117,f71,f161,f49,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f55,f62,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f250,f251,f252,f253,f254,f255,f256,f257,f258,f266,f269,f270,f271,f273,f274,f275,f127,f199,f128,f193,f196,f194,f195,f197,f80,f280,f281,f282,f284,f285,f286,f287&secid=0.002131&cb=jQuery183014984578807184268_1564676693979&_=1564676719011
 
 ## 来源
 - 可以从 [个股主页](#stockhome) 页面产生的接口中过滤出来
 
 ## 分解
+``` js
 - jQuery172028304362463696187_1564505076485(
 {
 rc: 0,
@@ -62,29 +61,25 @@ svr: 182482208,
 lt: 1,
 full: 1,
 data: {
-f162: 47.17, // 市盈率
-f167: 3.07  // 市净率
+f55: 1,//每股收益
+f84: 1,//总股本
+f85: 1,//流通股数量
+f116: 1,//总市值
+f117: 1,//流通市值
+f135: 1,//主力净流入
+f136: 1,//主力净流出
+f137: 1,//主力差值
+f162: 1,//市盈率(动)
+f167: 1,//市净率
+f173: 1,//ROE
+f183: 1,//总营收
+f184: 1,//同比总营收
+f185: 1,//同比净利润
+f186: 1,//毛利率
+f187: 1,//净利率
+f188: 1,//负债率
+f190: 1,//每股未分配利润
 }
 }
 )
-
-
-<h1 id="dealDetail1">个股每日【每笔】交易价格详情-页面</h1>
-http://quote.eastmoney.com/f1.html?code=[stockCode]&market=1
-
-
-<h1 id="dealDetail2">个股每日【每笔】交易价格详情-数据接口</h1>
-
-## 接口模型
-http://mdfm.eastmoney.com/EM_UBG_MinuteApi/Js/Get?dtype=all&token=44c9d251add88e27b65ed86506f6e5da&rows=144&cb=jQuery17209422426056116819_1563976899831&page=1&id=6016981&gtvolume=&sort=&_=1563977140110
-
-## 来源
-- 可以从 [个股每日每笔交易价格详情页](#dealDetail1) 页面产生的接口中过滤出来
-
-## 分解
-- 单条 *数据样例* 以及 *对应字段说明*
-``` js
-['09:35:25','13.56','32','1','-1','-115','4','3']
-
-['时间','交易价(元)','交易手数','','','较上一笔交易的相差手数','','']
 ```

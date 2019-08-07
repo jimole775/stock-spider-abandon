@@ -2,11 +2,12 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:25 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-07-31 10:38:47
+ * @Last Modified time: 2019-08-06 23:17:12
  */
 import phantom from 'phantom'
 import util from '../../../public/util'
-// import './sniff-hq-stock/index.js'
+const hqList = require('../../../db/temp_hq.json') 
+const dishqList = require('../../../db/temp_dishq.json') 
 class SniffHomePage {
     constructor() {  
     }
@@ -14,69 +15,82 @@ class SniffHomePage {
         return new Promise(async (s, j) => {
             this.instance = await phantom.create()
             this.page = await this.instance.createPage()
+            
+            this.page.on('onRrror', function(e){
+                console.log(e)
+            })
             this.page.on('onResourceRequested', true, function(requestData, networkRequest) {
                 if (util.isImgUrl(requestData.url)  || util.isCSSUrl(requestData.url)) {
                     networkRequest.abort()
                 } else {
-                    // if (/jquery\d+/i.test(requestData.url)) {
-                    //     console.log('request:', requestData.url)
-                    // }
                 }
             })
             
             this.page.on('onResourceReceived', true, function(response) {
-                
+                // http://gbapi.eastmoney.com/webarticlelist/api/Article/Articlelist?callback=jQuery183017469347580371908_1564543843706&code=000876&sorttype=1&ps=36&from=CommonBaPost&deviceid=0.3410789631307125&version=200&product=Guba&plat=Web&_=1564543843819
                 // http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js?id=9009571&TYPE=K&js=fsData1564493313404_51484267((x))&rtntype=5&isCR=false&authorityType=fa&fsData1564493313404_51484267=fsData1564493313404_51484267
-                if (response.stage === 'start' && /EM_UBG_PDTI_Fast.*?authorityType\=/ig.test(response.url)) {
-                    try {
-                        require('child_process').execFile('node', ['./app/src/process/sniff-hq-stock/index.js', 
-                            JSON.stringify({ params: { url: response.url }})], null,
-                            function (err, stdout, stderr) {
-                                console.log("err:", err)
-                                console.log("execFileSTDOUT:", stdout)
-                                console.log("execFileSTDERR:", stderr)
-                            });
-                    } catch (error) {
-                        console.log('/app/src/process/sniff-home-page.js:', error)
+                
+                // console.log('response.stage:', response.stage)
+                if (response.stage === 'start' && /EM_UBG_PDTI_Fast.+&authorityType\=/ig.test(response.url)) {
+                    sniffHQStock('sniff-hq-stock/query-from-all-deal-days.js', { url: response.url })
+                    console.log('获取URL：', response.url)
+                    function sniffHQStock(handlerPath, params) {
+                        try {
+                            return require('child_process').execFile('node', ['./src/app/process/nodejs/' + handlerPath, 
+                                JSON.stringify({ params: params })], null,
+                                function (err, stdout, stderr) {
+                                    console.log("execFileERR:", err)
+                                    console.log("execFileSTDOUT:", stdout)
+                                    console.log("execFileSTDERR:", stderr)
+                                })
+                        } catch (error) {
+                            console.log('src/app/process/phantomjs/sniff-home-page.js: ', error)
+                        }
                     }
-                }
-            })
-            
-            s()
+                }                
+            })            
+            s('SniffHomePage init success')
         })
     }
-    openPage() {
+    openPage(allStocks) {
         return new Promise((s, j)=>{
-            const allStocks = global.external.allStocks 
-            const loopLoadPage = async (i, s, j) => {
+            // const allStocks = global.external.allStocks 
+            const loopLoadPage = async (i) => {
 
                 const stock = allStocks[i]
-                // 退市和ST股，不考虑
-                if (!/[A-Za-z]/i.test(stock.stockName) && !/退市/.test(stock.stockName)) {
-                    console.log('打开的地址：', stock.stockHome)
+                // 名字不带 "ST" "退市" "银行" "钢"        
+                console.log('加载中...', stock.stockCode, stock.stockName)
+                if (!/([A-Z]|退市|银行|钢)/.test(stock.stockName) && !hqList[stock.stockCode] && !dishqList[stock.stockCode]) {
                     const status = await this.page.open(stock.stockHome)
-                    // const content = await page.property('content')
                     
                     if (status === 'success') {
-                      
                     } else {
-                        j('加载失败:', stock.stockHome)
-                        console.log('加载失败:', stock.stockHome)
+                        // j('加载失败:', stock.stockHome)
+                        console.log('加载失败:', stock.stockName)
                     }
+                    
+                    // 增加一个随机的延迟，防止被请求被屏蔽
+                    setTimeout(() => {
+                        if (i === allStocks.length - 1) {
+                            s('SniffHomePage loopLoadPage end')
+                            this.page.close()
+                            return phantom.exit()                            
+                        }
+                        return loopLoadPage(++ i)
+                    }, Math.random() * 500 + Math.random() * 200 + Math.random() * 100 + 1000)
+                } else {
+                    // setTimeout(() => {
+                    if (i === allStocks.length - 1) {
+                        s('SniffHomePage loopLoadPage end')
+                        this.page.close()
+                        return phantom.exit()                            
+                    }
+                    return loopLoadPage(++ i)
+                    // }, 100)
                 } 
         
-                // 增加一个随机的延迟，防止被请求被屏蔽
-                setTimeout(() => {
-                    if (i === allStocks.length - 1) {
-                        s()
-                        this.page.close()
-                        phantom.exit()
-                        return 
-                    }
-                    loopLoadPage(++ i, s, j)
-                }, Math.random() * 300 + Math.random() * 200)
             }
-            loopLoadPage(0, s, j)
+            loopLoadPage(0)
         })
     }
 
@@ -93,8 +107,8 @@ class SniffHomePage {
                 console.log('is got token3')
             }
         } catch (error) {
-            console.log('.\app\src\phantom-process\sniff-home-page.js:87 ', error)
-            phantom.exit()
+            console.log('/src/app/process/phantomjs/sniff-home-page.js:87 ', error)
+            // phantom.exit()
         }     
     }
 }
