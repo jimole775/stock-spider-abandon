@@ -60,7 +60,8 @@ const testUrl = 'http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&tok
 // ST雏鹰 002477
 // const testUrl = 'http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&token=4f1862fc3b5e77c150a2b985b12db0fd&cb=jQuery183019202343044586745_1564640693606&id=0024772&type=k&authorityType=&_=1564640697019'
 // 603113
-exc(testUrl)
+// exc(testUrl)
+exc('http://quote.eastmoney.com/sz000688.html')
 // excMock(mock)
 function exc(url) {
     quest(url)
@@ -95,7 +96,7 @@ function quest(url) {
             res.on('end', () => {
                 try {
                     if (rawData.length) {
-                        // console.log('rawData:', rawData)
+                        console.log('rawData:', rawData)
                         const dataString = rawData.match(/\(\{.*?\}\)/ig)[0]
 
                         const res = dataString && eval(dataString)

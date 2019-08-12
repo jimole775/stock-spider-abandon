@@ -9,16 +9,16 @@ class Util {
     constructor(){
     }
     isImgUrl(src) {
-        return /(;base64,)|\.(png|jpe*g|gif|icon)/ig.test(src)
+        return /(;base64,)|\.(png|jpe*g|gif|icon)/.test(src)
     }
     isHTMLUrl(src) {
-        return /\.(s*html*)/ig.test(src)
+        return /\.(s*html*)/.test(src)
     }
     isCSSUrl(src) {
-        return /\.(sass|css|less)/ig.test(src)
+        return /\.(sass|css|less)/.test(src)
     }
     isJSUrl(src) {
-        return /\.(js)/ig.test(src)
+        return /\.(js)/.test(src)
     }
     // async loadYaml(url) {        
     //     console.log('yml path: ', url)

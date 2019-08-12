@@ -70,10 +70,10 @@ class SpillStockModel {
                 setTimeout(() => {
                     if (i === this.urls.length - 1) {
                         this.page.close()
-                        return s(allStocks)                        
+                        return s(allStocks)
                     }
                     return loopLoadPage(++ i, s, j)
-                }, Math.random() * 300 + Math.random() * 200 + Math.random() * 100 + 1000)  
+                }, Math.random() * 1000 + Math.random() * 800 + Math.random() * 500 + Math.random() * 300 )  
             }
 
             loopLoadPage(0, s, j)
