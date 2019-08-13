@@ -21,6 +21,7 @@ class SniffHomePage {
             })
             this.page.on('onResourceRequested', true, function(requestData, networkRequest) {
                 if (util.isImgUrl(requestData.url)  || util.isCSSUrl(requestData.url)) {
+                    console.log('abort:', requestData.url)
                     networkRequest.abort()
                 } else {
                 }
@@ -30,7 +31,7 @@ class SniffHomePage {
                 // http://gbapi.eastmoney.com/webarticlelist/api/Article/Articlelist?callback=jQuery183017469347580371908_1564543843706&code=000876&sorttype=1&ps=36&from=CommonBaPost&deviceid=0.3410789631307125&version=200&product=Guba&plat=Web&_=1564543843819
                 // http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js?id=9009571&TYPE=K&js=fsData1564493313404_51484267((x))&rtntype=5&isCR=false&authorityType=fa&fsData1564493313404_51484267=fsData1564493313404_51484267
                 
-                console.log('获取URL：', response.url)
+                // console.log('获取URL：', response.url)
                 if (response.stage === 'start' && /EM_UBG_PDTI_Fast.+&authorityType\=/ig.test(response.url)) {
                     return sniffHQStock('sniff-hq-stock/query-from-all-deal-days.js', { url: response.url })
                     function sniffHQStock(handlerPath, params) {
@@ -69,8 +70,7 @@ class SniffHomePage {
                     return setTimeout(() => {
                         if (i === allStocks.length - 1) {
                             s('SniffHomePage loopLoadPage end')
-                            this.page.close()
-                            return phantom.exit()                            
+                            return this.page.close()                                                 
                         }
                         console.log('轮回...')
                         return loopLoadPage(++ i, s, j)
@@ -79,8 +79,7 @@ class SniffHomePage {
                     return setTimeout(() => {
                         if (i === allStocks.length - 1) {
                             s('SniffHomePage loopLoadPage end')
-                            this.page.close()
-                            return phantom.exit()                            
+                            return this.page.close()                                                    
                         }
                         return loopLoadPage(++ i, s, j)
                     }, 15)

@@ -4,6 +4,9 @@
  * @Last Modified by: Rongxis
  * @Last Modified time: 2019-08-08 00:44:23
  */
+/**
+ * 过滤掉创业板的股票
+ */
 import phantom from 'phantom'
 import util from '../../../public/util'
 import urlModel from '../../../../config/url-model.json'
