@@ -2,7 +2,7 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:14 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-08-12 17:16:28
+ * @Last Modified time: 2019-08-14 08:52:40
  */
 
 /**
@@ -60,7 +60,8 @@ const testUrl = 'http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&tok
 // ST雏鹰 002477
 // const testUrl = 'http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?rtntype=5&token=4f1862fc3b5e77c150a2b985b12db0fd&cb=jQuery183019202343044586745_1564640693606&id=0024772&type=k&authorityType=&_=1564640697019'
 // 603113
-exc('http://www.jiabashunw.com/list-130-1.html')
+// exc(testUrl)
+exc('http://quote.eastmoney.com/sz000688.html')
 // excMock(mock)
 function exc(url) {
     quest(url)

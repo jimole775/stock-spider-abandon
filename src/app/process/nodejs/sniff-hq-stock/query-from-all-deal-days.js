@@ -37,7 +37,7 @@ const argv = process.argv.pop()
 const { params } = JSON.parse(argv)
 
 if (params && params.url) {
-   return exc(params.url)
+   exc(params.url)
 }
 
 function exc(url) {

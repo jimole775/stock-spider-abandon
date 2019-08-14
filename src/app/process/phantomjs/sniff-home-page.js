@@ -17,10 +17,11 @@ class SniffHomePage {
             this.page = await this.instance.createPage()
             
             this.page.on('onRrror', function(e){
-                console.log(e)
+                console.log('onRrror:', e)
             })
             this.page.on('onResourceRequested', true, function(requestData, networkRequest) {
                 if (util.isImgUrl(requestData.url)  || util.isCSSUrl(requestData.url)) {
+                    console.log('abort:', requestData.url)
                     networkRequest.abort()
                 } else {
                 }
@@ -30,10 +31,9 @@ class SniffHomePage {
                 // http://gbapi.eastmoney.com/webarticlelist/api/Article/Articlelist?callback=jQuery183017469347580371908_1564543843706&code=000876&sorttype=1&ps=36&from=CommonBaPost&deviceid=0.3410789631307125&version=200&product=Guba&plat=Web&_=1564543843819
                 // http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js?id=9009571&TYPE=K&js=fsData1564493313404_51484267((x))&rtntype=5&isCR=false&authorityType=fa&fsData1564493313404_51484267=fsData1564493313404_51484267
                 
-                // console.log('response.stage:', response.stage)
+                // console.log('获取URL：', response.url)
                 if (response.stage === 'start' && /EM_UBG_PDTI_Fast.+&authorityType\=/ig.test(response.url)) {
-                    sniffHQStock('sniff-hq-stock/query-from-all-deal-days.js', { url: response.url })
-                    console.log('获取URL：', response.url)
+                    return sniffHQStock('sniff-hq-stock/query-from-all-deal-days.js', { url: response.url })
                     function sniffHQStock(handlerPath, params) {
                         try {
                             return require('child_process').execFile('node', ['./src/app/process/nodejs/' + handlerPath, 
@@ -54,8 +54,7 @@ class SniffHomePage {
     }
     openPage(allStocks) {
         return new Promise((s, j)=>{
-            // const allStocks = global.external.allStocks 
-            const loopLoadPage = async (i) => {
+            const loopLoadPage = async (i, s, j) => {
 
                 const stock = allStocks[i]
                 // 名字不带 "ST" "退市" "银行" "钢"        
@@ -64,31 +63,30 @@ class SniffHomePage {
                     const status = await this.page.open(stock.home)
                     if (status === 'success') {
                     } else {
-                        console.log('加载失败:', stock.name)
+                        console.log('加载失败:', status, stock.name)
                     }
                     
                     // 增加一个随机的延迟，防止被请求被屏蔽
-                    setTimeout(() => {
+                    return setTimeout(() => {
                         if (i === allStocks.length - 1) {
                             s('SniffHomePage loopLoadPage end')
-                            this.page.close()
-                            return phantom.exit()                            
+                            return this.page.close()                                                 
                         }
-                        return loopLoadPage(++ i)
-                    }, Math.random() * 500 + Math.random() * 200 + Math.random() * 100 + 2000)
+                        console.log('轮回...')
+                        return loopLoadPage(++ i, s, j)
+                    }, Math.random() * 800 + Math.random() * 500 + Math.random() * 300 + Math.random() * 100 + 1000)
                 } else {
-                    setTimeout(() => {
-                    if (i === allStocks.length - 1) {
-                        s('SniffHomePage loopLoadPage end')
-                        this.page.close()
-                        return phantom.exit()                            
-                    }
-                    return loopLoadPage(++ i)
+                    return setTimeout(() => {
+                        if (i === allStocks.length - 1) {
+                            s('SniffHomePage loopLoadPage end')
+                            return this.page.close()                                                    
+                        }
+                        return loopLoadPage(++ i, s, j)
                     }, 15)
                 } 
         
             }
-            loopLoadPage(0)
+            loopLoadPage(0, s, j)
         })
     }
 
