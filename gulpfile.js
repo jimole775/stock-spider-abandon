@@ -18,7 +18,7 @@ gulp.task('dev', function() {
         debug: true
     })
     // phantomjs的模块不要打包，否则无法运行
-    .external(['phantom'])
+    .external(['phantom','fs','child_process'])
     .transform(babelify, {})
     .bundle()
     .pipe(source('./app/bundle.js'))

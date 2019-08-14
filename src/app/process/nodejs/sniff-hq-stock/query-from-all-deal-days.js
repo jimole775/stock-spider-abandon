@@ -2,7 +2,7 @@
  * @Author: Rongxis 
  * @Date: 2019-07-25 14:23:14 
  * @Last Modified by: Rongxis
- * @Last Modified time: 2019-08-06 17:19:24
+ * @Last Modified time: 2019-08-14 11:36:57
  */
 
 /**
@@ -10,7 +10,7 @@
  * 1. 60%的交易日振幅超过3%，换手率超过1%
  * 2. 负债不超过42，净利率不能为负, 当前市盈率不超过150，不低于15, 股价不低于3元
  * 3. 名字不带 "ST" "退市" "中国" "银行" "钢"
- * 4. 交易日总数 超过 半年（365/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节7]）
+ * 4. 交易日总数 超过 半年（366/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节3]）
  * 5. 屏蔽板块 - 房地产，医药，生物，汽车
  */
 
@@ -31,8 +31,8 @@
  */
 const superagent = require('superagent')
 const fs = require('fs')
-const hqList = require('../../../../db/temp_hq.json') 
-const dishqList = require('../../../../db/temp_dishq.json') 
+const hqList = require('../../../../db/base_hq.json') 
+const dishqList = require('../../../../db/base_dishq.json') 
 const argv = process.argv.pop()
 const { params } = JSON.parse(argv)
 
@@ -55,7 +55,7 @@ function exc(url) {
                 code: code,
                 allDealUrl: url
             }
-            fs.writeFileSync('./src/db/temp_hq.json', JSON.stringify(hqList), 'utf8')
+            fs.writeFileSync('./src/db/base_hq.json', JSON.stringify(hqList), 'utf8')
         } else {            
             console.log('高质失败：', name, code)
             dishqList[code] = {
@@ -63,7 +63,7 @@ function exc(url) {
                 code: code,
                 allDealUrl: url
             }
-            fs.writeFileSync('./src/db/temp_dishq.json', JSON.stringify(dishqList), 'utf8')
+            fs.writeFileSync('./src/db/base_dishq.json', JSON.stringify(dishqList), 'utf8')
         }
     }).catch(function(e) {
         console.log(__dirname + ':', e)
@@ -126,10 +126,10 @@ function queryByTurnOver(list = []) {
 }
 
 /**
- * 交易日总数 超过 半年（365/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节5]）
+ * 交易日总数 超过 半年（365/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节3]）
  */
 function isBeyandHalfYear(list = []) {
-    return list.length >= 365 / 7 * 5 / 2 - (3 + 3 + 3 + 3 + 5)
+    return list.length >= 366 / 7 * 5 / 2 - (3 + 3 + 3 + 3 + 3)
 }
 
 /**
