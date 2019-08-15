@@ -1,4 +1,4 @@
-
+/**把高质票中的创业票清洗到低质票 */
 const baseHq = require('../db/base_hq.json')
 const baseDisHq = require('../db/base_dishq.json')
 const fs = require('fs')

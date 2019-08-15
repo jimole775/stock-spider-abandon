@@ -1,3 +1,8 @@
+
+/**
+ * 根据所有交易日的详情
+ * 计算出一些想要的数据
+ */
 const hq_stocks = require('../src/db/base_hq.json')
 const stockCodes = Object.keys(hq_stocks)
 loopQuest()
@@ -26,25 +31,62 @@ function spillSingleModel(data, code, name) {
     const model = {
         code,
         name,
-        rise:0,
-        fall:0,
-        balance: 0
+        priceRiseTimes: 0,
+        priceFallTimes: 0,
+        priceBalanceTimes: 0,
+        priceTop: 0,
+        priceBottom: 9999,
+        amplitudeTop: 0,
+        amplitudeAvg: 0,
+        riseRateAvg: 0,
+        fallRateAvg: 0,
+        temp_riseRateSum: 0,
+        temp_fallRateSum: 0,
+        temp_amplitudeSum: 0,
     }  
     data.forEach((item) => {
         const rowSplit = item.split(',')
-        const startPrice = rowSplit[1]
-        const endPrice = rowSplit[2]
+        const startPrice = Number.parseFloat(rowSplit[1])
+        const endPrice = Number.parseFloat(rowSplit[2])
+        const topPrice = Number.parseFloat(rowSplit[3])
+        const botPrice = Number.parseFloat(rowSplit[4])
+        const amplitude = (topPrice - botPrice) / startPrice
+        const turnover = Number.parseFloat(rowSplit[8])
         if (startPrice > endPrice) {
-            model.rise ++
+            model.priceRiseTimes ++
         }
         if (startPrice < endPrice) {
-            model.fall ++
+            model.priceFallTimes ++
         }
         if (startPrice === endPrice) {
-            model.balance ++
+            model.priceBalanceTimes ++
         }
+        if (model.priceTop < topPrice) {
+            model.priceTop = topPrice
+        }
+        if (model.priceBottom > botPrice) {
+            model.priceBottom = botPrice
+        }
+        if (model.amplitudeTop < amplitude) {
+            model.amplitudeTop = amplitude
+        }
+        if (endPrice - startPrice > 0) {
+            model.temp_riseRateSum += (endPrice - startPrice) / startPrice
+        } 
+        if (endPrice - startPrice < 0) {
+            model.temp_fallRateSum += Math.abs(endPrice - startPrice) / startPrice
+        }
+        
+        model.temp_amplitudeSum += amplitude
     })
 
+    model.riseRateAvg = (Math.round(model.temp_riseRateSum / data.length * 10000) / 100).toFixed(2) + '%'
+    model.fallRateAvg = (Math.round(- model.temp_fallRateSum / data.length * 10000) / 100).toFixed(2) + '%'
+    model.amplitudeAvg = (Math.round(model.temp_amplitudeSum / data.length * 10000) / 100).toFixed(2) + '%'
+    model.amplitudeTop = (Math.round(model.amplitudeTop * 10000) / 100).toFixed(2) + '%'
+    delete model.temp_riseRateSum
+    delete model.temp_fallRateSum
+    delete model.temp_amplitudeSum
     return model
 }
 
