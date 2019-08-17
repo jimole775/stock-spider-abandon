@@ -126,7 +126,7 @@ function queryByTurnOver(list = []) {
 }
 
 /**
- * 交易日总数 超过 半年（365/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节3]）
+ * 交易日总数 超过 半年（366/7*5/2 - [节假日:国庆3 + 劳动3 + 清明3 + 中秋3 + 春节3]）
  */
 function isBeyandHalfYear(list = []) {
     return list.length >= 366 / 7 * 5 / 2 - (3 + 3 + 3 + 3 + 3)

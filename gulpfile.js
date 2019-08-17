@@ -10,17 +10,20 @@ var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var log = require('gulplog');
 var shell = require('gulp-shell');
-var aliasCombo = require('gulp-alias-combo');
+var alias = require('./gulp-alias');
 
 gulp.task('dev', function() {
   return browserify({
-        entries: './src/app/index.js',
+        entries: './app/src/index.js',
         debug: true
     })
     // phantomjs的模块不要打包，否则无法运行
     .external(['phantom','fs','child_process'])
     .transform(babelify, {})
     .bundle()
+    .pipe(alias({
+        '@':'test3/'
+    }))
     .pipe(source('./app/bundle.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./dev/'))

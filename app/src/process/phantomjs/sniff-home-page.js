@@ -6,8 +6,8 @@
  */
 import phantom from 'phantom'
 import util from '../../../public/util'
-const hqList = require('../../../db/base_hq.json') 
-const dishqList = require('../../../db/base_dishq.json') 
+const hqList = require('../../../db/base_hq.json.js') 
+const dishqList = require('../../../db/base_dishq.json.js') 
 class SniffHomePage {
     constructor() {  
     }

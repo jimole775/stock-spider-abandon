@@ -2,7 +2,7 @@ import '@babel/polyfill'
 
 import spillStockModel from './process/phantomjs/spill-stock-model'
 import sniffHomePage from './process/phantomjs/sniff-home-page'
-import sniffGemStocks from './process/phantomjs/sniff_gem_stocks'
+import sniffGemStocks from './process/phantomjs/sniff-gem-stocks'
 
 // global.external = {
 //     token: '',
