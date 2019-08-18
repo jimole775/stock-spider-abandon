@@ -1,22 +1,34 @@
+/*
+ * @Author: Rongxis 
+ * @Date: 2019-08-17 10:59:54 
+ * @Last Modified by:   Rongxis 
+ * @Last Modified time: 2019-08-17 10:59:54 
+ */
 
 var path = require('path')
 var through2 = require('through2')
-module.exports = function alias(aliasConfig) {
+/**
+ *@params {alias:{}, dest:'', root:''}
+ */
+module.exports = function alias(params) {
     return through2.obj(function(file, encoding, cb){        
         var content = file._contents.toString()
-        Object.keys(aliasConfig).forEach((alias)=>{
-            var realPath = aliasConfig[alias]
+        var alias = params.alias ? params.alias : {}
+        var dest = params.dest ? params.dest : ''
+        Object.keys(alias).forEach((aliasItem)=>{
+            var realPath = alias[aliasItem]
 
             // 判断有没有分隔符
             realPath = /[\/\\]$/.test(realPath) ? realPath : realPath + '/'
+            dest = /[\/\\]$/.test(dest) ? dest : dest + '/'
 
             // 动态创建正则
-            var requireReg =  new RegExp('require\\([\\\'\\\"]' + alias + '[\\\\/]', 'g')
-            var importReg =  new RegExp('from\\s[\\\'\\\"]' + alias + '[\\\\/]', 'g')
+            var requireReg =  new RegExp('require\\([\\\'\\\"]' + aliasItem + '[\\\\/]', 'g')
+            var importReg =  new RegExp('from\\s[\\\'\\\"]' + aliasItem + '[\\\\/]', 'g')
 
             // 进行全局替换
-            content = content.replace(requireReg, 'require(\'' + pathCompatible(path.join(__dirname, realPath)))
-            content = content.replace(importReg, 'from \'' + pathCompatible(path.join(__dirname, realPath)))
+            content = content.replace(requireReg, 'require(\'' + pathCompatible(path.join(__dirname, dest + realPath)))
+            content = content.replace(importReg, 'from \'' + pathCompatible(path.join(__dirname, dest + realPath)))
         })
         file._contents = Buffer.from(content)
         this.push(file)

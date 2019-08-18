@@ -31,8 +31,8 @@
  */
 const superagent = require('superagent')
 const fs = require('fs')
-const hqList = require('_db/base_hq.json') 
-const dishqList = require('_db/base_dishq.json') 
+const hqList = require('E:/gitStore/stock-spider/temp_dest/db/base_hq.json') 
+const dishqList = require('E:/gitStore/stock-spider/temp_dest/db/base_dishq.json') 
 const argv = process.argv.pop()
 const { params } = JSON.parse(argv)
 

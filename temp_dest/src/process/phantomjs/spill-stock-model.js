@@ -5,8 +5,8 @@
  * @Last Modified time: 2019-08-17 10:43:26
  */
 import phantom from 'phantom'
-import util from '_pub/util'
-import urlModel from '_model/url-model.json'
+import util from 'E:/gitStore/stock-spider/temp_dest/public/util'
+import urlModel from 'E:/gitStore/stock-spider/temp_dest/model/url-model.json'
 class SpillStockModel {
     constructor() {  
         // this.urlModel = util.loadYaml('../../../../config/url-model.yml')

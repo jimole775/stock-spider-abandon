@@ -5,9 +5,9 @@
  * @Last Modified time: 2019-08-17 10:43:24
  */
 import phantom from 'phantom'
-import util from '_pub/util'
-const hqList = require('_db/base_hq.json') 
-const dishqList = require('_db/base_dishq.json') 
+import util from 'E:/gitStore/stock-spider/temp_dest/public/util'
+const hqList = require('E:/gitStore/stock-spider/temp_dest/db/base_hq.json') 
+const dishqList = require('E:/gitStore/stock-spider/temp_dest/db/base_dishq.json') 
 class SniffHomePage {
     constructor() {  
     }
