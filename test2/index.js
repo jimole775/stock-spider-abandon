@@ -3,7 +3,7 @@
  * 根据所有交易日的详情
  * 计算出一些想要的数据
  */
-const hq_stocks = require('../app/db/base_hq.json')
+const hq_stocks = require('../src/db/base_hq.json')
 const stockCodes = Object.keys(hq_stocks)
 loopQuest()
 function loopQuest() {
@@ -49,6 +49,7 @@ function spillSingleModel(data, code, name) {
     }  
     data.forEach((item) => {
         const rowSplit = item.split(',')
+        const date = rowSplit[0]
         const startPrice = Number.parseFloat(rowSplit[1])
         const endPrice = Number.parseFloat(rowSplit[2])
         const topPrice = Number.parseFloat(rowSplit[3])
@@ -90,12 +91,20 @@ function spillSingleModel(data, code, name) {
                 model.temp_seriesLimitFallTimes : model.seriesLimitFallTimes
             if (model.temp_seriesLimitFallTimes >= 3) {                
                 console.log('跌幅超过9%超3次')
+                model.seriesLimitFallDate = date
+                model.seriesLimitFallPrice = endPrice
                 model.isMined = 1
             }
         } else {
             model.temp_seriesLimitFallTimes = 0
         }
 
+        // 比较暴雷超跌后，股价回滚需要多久
+        if (model.seriesLimitFallDate && !model.seriesLimitFallRollbackDate) {
+            if (endPrice >= model.seriesLimitFallPrice) {
+                model.seriesLimitFallRollbackDate = date
+            }
+        }
 
         model.temp_amplitudeSum += amplitude
     })
