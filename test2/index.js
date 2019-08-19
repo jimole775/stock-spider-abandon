@@ -41,6 +41,7 @@ function spillSingleModel(data, code, name) {
         riseRateAvg: 0, // 平均上涨的幅度
         fallRateAvg: 0, // 平均下跌的幅度
         isMined: 0, // 0代表未暴雷股，1代表暴雷股
+        seriesLimitFallTimes: 0,
         temp_riseRateSum: 0,
         temp_fallRateSum: 0,
         temp_amplitudeSum: 0,
@@ -82,7 +83,11 @@ function spillSingleModel(data, code, name) {
 
         // 判断是否有连续3天跌幅超过9%
         if (priceDivdRate < -0.09) {
+
             model.temp_seriesLimitFallTimes ++
+            model.seriesLimitFallTimes = 
+                model.temp_seriesLimitFallTimes > model.seriesLimitFallTimes ? 
+                model.temp_seriesLimitFallTimes : model.seriesLimitFallTimes
             if (model.temp_seriesLimitFallTimes >= 3) {                
                 console.log('跌幅超过9%超3次')
                 model.isMined = 1
@@ -90,6 +95,7 @@ function spillSingleModel(data, code, name) {
         } else {
             model.temp_seriesLimitFallTimes = 0
         }
+
 
         model.temp_amplitudeSum += amplitude
     })

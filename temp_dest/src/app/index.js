@@ -1,8 +1,8 @@
 import '@babel/polyfill'
 
-import spillStockModel from 'E:/gitStore/stock-spider/temp_dest/src/process/phantomjs/spill-stock-model'
-import sniffHomePage from 'E:/gitStore/stock-spider/temp_dest/src/process/phantomjs/sniff-home-page'
-import sniffGemStocks from 'E:/gitStore/stock-spider/temp_dest/src/process/phantomjs/sniff-gem-stocks'
+import spillStockModel from 'F:/MyPro/stock-spider/temp_dest/src/app/process/phantomjs/spill-stock-model'
+import sniffHomePage from 'F:/MyPro/stock-spider/temp_dest/src/app/process/phantomjs/sniff-home-page'
+import sniffGemStocks from 'F:/MyPro/stock-spider/temp_dest/src/app/process/phantomjs/sniff-gem-stocks'
 
 ;(async () => {
     await spillStockModel.init()
