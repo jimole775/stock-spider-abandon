@@ -134,7 +134,7 @@ function spillSingleModel(data, code, name) {
                 if (!model.seriesLimitRiseStartDate) model.seriesLimitRiseStartDate = date
                 model.seriesBoradTimes ++
             }
-        } else {
+        } else { 
             model.temp_seriesLimitRiseTimes = 0
         }
         
