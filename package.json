@@ -11,13 +11,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "alias": {
-      "@":"src",
-      "_app":"src/app",
-      "_node":"src/app/process/nodejs",
-      "_phantom":"src/app/process/phantomjs",
-      "_model":"src/model",
-      "_pub":"src/public",
-      "_db":"src/db"
+    "@": "src",
+    "_app": "src/app",
+    "_node": "src/app/process/nodejs",
+    "_phantom": "src/app/process/phantomjs",
+    "_model": "src/model",
+    "_pub": "src/public",
+    "_db": "src/db"
   },
   "author": "",
   "license": "ISC",
@@ -49,6 +49,7 @@
     "gulp-watch": "^5.0.1",
     "gulplog": "^1.0.0",
     "js-yaml": "^3.13.1",
+    "mongodb": "^3.3.4",
     "phantom": "^6.2.0",
     "reactify": "^1.1.1",
     "superagent": "^5.1.0",
