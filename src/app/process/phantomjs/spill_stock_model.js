@@ -5,11 +5,11 @@
  * @Last Modified time: 2019-08-17 10:43:26
  */
 import phantom from 'phantom'
-import util from '_pub/util'
-import urlModel from '_model/url-model.json'
+import util from '@/public/util'
+import urlModel from '@/model/url_model.json'
 class SpillStockModel {
     constructor() {  
-        // this.urlModel = util.loadYaml('../../../../config/url-model.yml')
+        // this.urlModel = util.loadYaml('../../../../config/url_model.yml')
     }
     init() {
         return new Promise(async (s, j)=>{
@@ -104,7 +104,7 @@ class SpillStockModel {
             // 裁剪掉 "非数据" 的后半部    
             return ulContentSpill.split('</a></li>')
         } catch(e) {
-            console.log('./src/app/process/phantomjs/spill-stock-model.js: ', e)
+            console.log('./src/app/process/phantomjs/spill_stock_model.js: ', e)
             // phantom.exit()
         }
     }
@@ -129,7 +129,7 @@ class SpillStockModel {
 
             return stockModel
         } catch(e) {
-            console.log('./src/app/process/phantomjs/spill-stock-model.js: ', e)
+            console.log('./src/app/process/phantomjs/spill_stock_model.js: ', e)
             // phantom.exit()
         }
     }
@@ -143,7 +143,7 @@ class SpillStockModel {
                 }
             }
         } catch (error) {
-            console.log('./src/app/process/phantomjs/sniff-home-page.js:87 ', error)
+            console.log('./src/app/process/phantomjs/sniff_home_page.js:87 ', error)
             // phantom.exit()
         }     
     }    

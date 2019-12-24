@@ -5,9 +5,9 @@
  * @Last Modified time: 2019-08-17 10:43:24
  */
 import phantom from 'phantom'
-import util from '_pub/util'
-const hqList = require('_db/base_hq.json') 
-const dishqList = require('_db/base_dishq.json') 
+import util from 'F:/MyPro/stock-spider/temp_dest/src/public/util'
+const hqList = require('F:/MyPro/stock-spider/temp_dest/src/db/base_hq.json') 
+const dishqList = require('F:/MyPro/stock-spider/temp_dest/src/db/base_dishq.json') 
 class SniffHomePage {
     constructor() {  
     }
@@ -33,7 +33,7 @@ class SniffHomePage {
                 
                 // console.log('获取URL：', response.url)
                 if (response.stage === 'start' && /EM_UBG_PDTI_Fast.+&authorityType\=/ig.test(response.url)) {
-                    return sniffHQStock('sniff-hq-stock/query-from-all-deal-days.js', { url: response.url })
+                    return sniffHQStock('sniff-hq-stock/query_from_all_deal_days.js', { url: response.url })
                     function sniffHQStock(handlerPath, params) {
                         try {
                             return require('child_process').execFile('node', ['./src/app/process/nodejs/' + handlerPath, 
@@ -44,7 +44,7 @@ class SniffHomePage {
                                     console.log("execFileSTDERR:", stderr)
                                 })
                         } catch (error) {
-                            console.log('src/app/process/phantomjs/sniff-home-page.js: ', error)
+                            console.log('src/app/process/phantomjs/sniff_home_page.js: ', error)
                         }
                     }
                 }                
@@ -103,7 +103,7 @@ class SniffHomePage {
                 console.log('is got token3')
             }
         } catch (error) {
-            console.log('/src/app/process/phantomjs/sniff-home-page.js:87 ', error)
+            console.log('/src/app/process/phantomjs/sniff_home_page.js:87 ', error)
             // phantom.exit()
         }     
     }

@@ -12,12 +12,8 @@
   },
   "alias": {
       "@":"src",
-      "_app":"src/app",
-      "_node":"src/app/process/nodejs",
-      "_phantom":"src/app/process/phantomjs",
-      "_model":"src/model",
-      "_pub":"src/public",
-      "_db":"src/db"
+      "@node":"src/app/process/nodejs",
+      "@phantom":"src/app/process/phantomjs"
   },
   "author": "",
   "license": "ISC",

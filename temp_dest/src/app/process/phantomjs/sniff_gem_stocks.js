@@ -9,10 +9,10 @@
  */
 import phantom from 'phantom'
 import util from 'F:/MyPro/stock-spider/temp_dest/src/public/util'
-import urlModel from 'F:/MyPro/stock-spider/temp_dest/src/model/url-model.json'
+import urlModel from 'F:/MyPro/stock-spider/temp_dest/src/model/url_model.json'
 class SniffGemStocks {
     constructor() {  
-        // this.urlModel = util.loadYaml('../../../../config/url-model.yml')
+        // this.urlModel = util.loadYaml('../../../../config/url_model.yml')
     }
     init() {
         return new Promise(async (s, j)=>{
@@ -56,7 +56,7 @@ class SniffGemStocks {
         })
     }
 
-    queryGemStocks(allStocks) {
+    query_gem_stocks(allStocks) {
         return new Promise(async (s, j)=>{
             const gemStocks = await this.getGemStocks()
             let gemStocksLoop = gemStocks.length
